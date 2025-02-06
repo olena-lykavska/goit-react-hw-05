@@ -1,35 +1,48 @@
-.reviews-container {
+.reviewsContainer {
     padding: 20px;
-    background-color: #fff;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-h2 {
+.heading {
     font-size: 24px;
-    color: #333;
+    font-weight: bold;
     margin-bottom: 16px;
+    color: #333;
+    text-align: center;
 }
 
-ul {
-    padding-left: 20px;
+.reviewList {
+    list-style: none;
+    padding: 0;
 }
 
-li {
-    margin-bottom: 12px;
+.reviewItem {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
 }
 
-p {
+.reviewItem:last-child {
+    border-bottom: none;
+}
+
+.reviewText {
     font-size: 16px;
-    color: #555;
+    line-height: 1.5;
+    color: #444;
 }
 
-strong {
+.author {
     font-weight: bold;
     color: #4d5ae5;
 }
 
-.no-reviews {
+.noReviews {
+    text-align: center;
+    font-size: 18px;
     color: #888;
-    font-style: italic;
+    margin-top: 20px;
 }

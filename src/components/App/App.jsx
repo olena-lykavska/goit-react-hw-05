@@ -1,8 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-
-// Імпорт компонента Navigation для навігації між сторінками
 import Navigation from '../Navigation/Navigation';
+import styles from './App.module.css';
 
 // Використовуємо React.lazy для поділу коду (відкладене завантаження сторінок)
 const HomePage = lazy(() => import('../../pages/HomePage/HomePage'));
@@ -12,17 +11,15 @@ const MovieCast = lazy(() => import('../../components/MovieCast/MovieCast'));
 const MovieReviews = lazy(() => import('../../components/MovieReviews/MovieReviews'));
 const NotFoundPage = lazy(() => import('../../pages/NotFoundPage/NotFoundPage'));
 
-// Імпорт стилів (CSS-модулі)
-import css from './App.module.css';
 
 const App = () => {
   return (
-    <div className={css.container}>
+    <div className={styles.container}>
       {/* Компонент навігації */}
       <Navigation />
 
       {/* Обгортка Suspense для завантаження сторінок асинхронно */}
-      <Suspense fallback={<div className={css.loading}>Завантаження...</div>}>
+      <Suspense fallback={<div className={styles.loading}>Завантаження...</div>}>
         <Routes>
           {/* Головна сторінка (список популярних фільмів) */}
           <Route path="/" element={<HomePage />} />
