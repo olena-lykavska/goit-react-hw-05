@@ -1,0 +1,35 @@
+/* src/components/MovieCast/MovieCast.module.css */
+.castContainer {
+    padding: 20px;
+    text-align: center;
+}
+
+.castList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.actorCard {
+    max-width: 150px;
+    text-align: center;
+}
+
+.actorPhoto {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.actorPhoto:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+.actorCard p {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}

@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,17 @@
 
 .read-the-docs {
   color: #888;
+} */
+/* Основні стилі для застосунку */
+/* Основний контейнер застосунку */
+.container {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
+  padding: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #4d5ae5;
 }

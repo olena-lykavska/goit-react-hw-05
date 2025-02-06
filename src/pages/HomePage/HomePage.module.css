@@ -1,0 +1,32 @@
+.container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.listItem {
+    margin-bottom: 10px;
+}
+
+.link {
+    text-decoration: none;
+    font-size: 18px;
+    color: #4d5ae5;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #333;
+}

@@ -1,0 +1,35 @@
+.reviews-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+}
+
+strong {
+    font-weight: bold;
+    color: #4d5ae5;
+}
+
+.no-reviews {
+    color: #888;
+    font-style: italic;
+}
