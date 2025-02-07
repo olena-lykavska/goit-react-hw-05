@@ -9,20 +9,20 @@ const Navigation = () => {
         {/* Посилання на головну сторінку */}
         <li>
           <NavLink 
-            to="/" 
-            className={({ isActive }) => (isActive ? styles.active : styles.link)} // Додаємо активний клас, якщо посилання активне
+            to="/" // Вказуємо шлях до головної сторінки
+            className={({ isActive }) => (isActive ? styles.active : styles.link)} // Додаємо стиль активного посилання
           >
-            Home
+            Home {/* Текст посилання */}
           </NavLink>
         </li>
 
         {/* Посилання на сторінку пошуку фільмів */}
         <li>
           <NavLink 
-            to="/movies" 
-            className={({ isActive }) => (isActive ? styles.active : styles.link)} // Аналогічно додаємо клас для активного посилання
+            to="/movies" // Вказуємо шлях до сторінки фільмів
+            className={({ isActive }) => (isActive ? styles.active : styles.link)} // Аналогічно додаємо стиль для активного посилання
           >
-            Movies
+            Movies {/* Текст посилання */}
           </NavLink>
         </li>
 
@@ -31,4 +31,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation; // Експортуємо компонент для використання в інших частинах застосунку
+export default Navigation;
