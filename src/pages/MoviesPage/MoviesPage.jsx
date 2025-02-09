@@ -1,87 +1,68 @@
-// Імпортуємо необхідні хуки та компоненти з React та React Router
-import { useState, useEffect } from "react"; // для управління станом та побічними ефектами
-import { useSearchParams, Link } from "react-router-dom"; // для роботи з параметрами пошуку в URL та навігації
-import { searchMovies } from "../../services/api"; // користувацька служба для пошуку фільмів
-import styles from "./MoviesPage.module.css"; // CSS модуль для стилізації сторінки
+import { useState, useEffect } from "react"; // Імпортуємо хуки useState та useEffect з React для управління станом і виконання побічних ефектів.
+import { useSearchParams } from "react-router-dom"; // Імпортуємо хук useSearchParams для роботи з параметрами пошукового запиту в URL.
+import { searchMovies } from "../../services/api"; // Імпортуємо функцію searchMovies для пошуку фільмів через API.
+import MovieList from "../../components/MovieList/MovieList"; // Імпортуємо компонент MovieList для відображення знайдених фільмів.
+import styles from "./MoviesPage.module.css"; // Імпортуємо CSS модулі для стилізації сторінки.
 
-function MoviesPage() {
-  // Витягуємо параметри пошуку з URL
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get("query") || ""; // Отримуємо значення пошукового запиту з URL, якщо воно є
-  const [movies, setMovies] = useState([]); // Стейт для збереження списку фільмів
-  const [error, setError] = useState(""); // Стейт для збереження помилки
-  const [isLoading, setIsLoading] = useState(false); // Стейт для відслідковування завантаження даних
+function MoviesPage() { // Функціональний компонент MoviesPage.
+  const [searchParams, setSearchParams] = useSearchParams(); // Використовуємо хук для отримання параметрів пошуку з URL та функції для їх оновлення.
+  const query = searchParams.get("query") || ""; // Отримуємо значення параметра "query" з URL або задаємо пустий рядок за замовчуванням.
+  const [movies, setMovies] = useState([]); // Створюємо стан для зберігання знайдених фільмів.
+  const [error, setError] = useState(""); // Створюємо стан для обробки помилок.
+  const [isLoading, setIsLoading] = useState(false); // Створюємо стан для індикації процесу завантаження.
 
-  // Хук useEffect для виконання пошуку фільмів при зміні query
-  useEffect(() => {
-    if (!query) return; // Якщо запит порожній, не робимо запит
+  useEffect(() => { // Використовуємо хук useEffect для виконання функції пошуку фільмів кожного разу, коли змінюється параметр "query".
+    if (!query) return; // Якщо немає запиту на пошук, то не виконуємо пошук.
 
-    setIsLoading(true); // Встановлюємо стан завантаження
-    setError(""); // Скидаємо попередні помилки
+    setIsLoading(true); // Починаємо завантаження.
+    setError(""); // Скидаємо попередню помилку.
 
-    // Викликаємо функцію пошуку фільмів
-    searchMovies(query)
-      .then((results) => {
-        if (Array.isArray(results)) { // Перевіряємо, чи є результати у вигляді масиву
-          setMovies(results); // Якщо так, оновлюємо список фільмів
+    searchMovies(query) // Викликаємо функцію searchMovies, передаючи поточний пошуковий запит.
+      .then((results) => { // Якщо пошук успішний:
+        if (Array.isArray(results)) { // Перевіряємо, чи результат є масивом.
+          setMovies(results); // Якщо так, оновлюємо стан movies.
         } else {
-          throw new Error("Invalid data format"); // Якщо дані не є масивом, викидаємо помилку
+          throw new Error("Invalid data format"); // Якщо формат даних неправильний, генеруємо помилку.
         }
       })
-      .catch(() => setError("Error fetching movies.")) // Обробка помилки, якщо запит не вдався
-      .finally(() => setIsLoading(false)); // Завершуємо завантаження, незалежно від результату
-  }, [query]); // Пошук перезапускається, якщо змінюється query
+      .catch(() => setError("Error fetching movies.")) // Якщо сталася помилка під час запиту, встановлюємо відповідне повідомлення про помилку.
+      .finally(() => setIsLoading(false)); // Незалежно від результату, зупиняємо індикацію завантаження.
+  }, [query]); // Залежність від query, щоб ефект виконувався кожного разу при зміні пошукового запиту.
 
-  // Обробник відправки форми пошуку фільмів
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Запобігаємо перезавантаженню сторінки
-    const form = event.target; // Отримуємо форму
-    const searchTerm = form.elements.search.value.trim(); // Отримуємо значення пошукового терміну
+  const handleSubmit = (event) => { // Обробник відправки форми.
+    event.preventDefault(); // Скасовуємо стандартну поведінку форми (перезавантаження сторінки).
+    const form = event.target; // Отримуємо саму форму.
+    const searchTerm = form.elements.search.value.trim(); // Отримуємо значення пошукового запиту з поля input і видаляємо зайві пробіли.
 
-    if (!searchTerm) { // Якщо пошуковий термін порожній, виводимо помилку
-      setError("Please enter a search term.");
+    if (!searchTerm) { // Якщо пошуковий запит порожній:
+      setError("Please enter a search term."); // Встановлюємо помилку, що потрібно ввести термін для пошуку.
       return;
     }
 
-    setError(""); // Скидаємо помилку
-    setSearchParams({ query: searchTerm }); // Оновлюємо параметри пошуку в URL
+    setError(""); // Якщо запит є, скидаємо помилку.
+    setSearchParams({ query: searchTerm }); // Оновлюємо параметри пошукового запиту в URL.
   };
 
   return (
-    <div className={styles.container}>
-      {/* Форма для пошуку фільмів */}
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}> {/* Основний контейнер для сторінки. */}
+      <form onSubmit={handleSubmit}> {/* Форма для введення пошукового запиту. */}
         <input
-          name="search"
-          defaultValue={query} // Підставляємо значення запиту в поле пошуку
-          placeholder="Search for movies..."
-          className={styles.searchInput}
+          name="search" // Поле вводу для пошукового запиту.
+          defaultValue={query} // Встановлюємо значення поля вводу на основі поточного запиту.
+          placeholder="Search for movies..." // Текст-підказка в полі вводу.
+          className={styles.searchInput} // Застосовуємо стилі до поля вводу.
         />
-        <button type="submit" className={styles.searchButton} disabled={isLoading}>
-          {isLoading ? "Loading..." : "Search"} {/* Кнопка для пошуку, змінює текст на "Loading..." під час завантаження */}
+        <button type="submit" className={styles.searchButton} disabled={isLoading}> {/* Кнопка для відправки форми. */}
+          {isLoading ? "Loading..." : "Search"} {/* Показуємо "Loading..." під час завантаження, інакше текст "Search". */}
         </button>
       </form>
 
-      {/* Якщо є помилка, відображаємо повідомлення про помилку */}
-      {error && <p className={styles.error}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>} {/* Якщо є помилка, відображаємо її. */}
+      {!isLoading && movies.length === 0 && query && <p className={styles.noResults}>No movies found.</p>} {/* Якщо немає результатів, показуємо повідомлення, що фільмів не знайдено. */}
 
-      {/* Якщо запит є, але немає результатів, виводимо повідомлення про відсутність фільмів */}
-      {!isLoading && movies.length === 0 && query && <p className={styles.noResults}>No movies found.</p>}
-
-      {/* Якщо є фільми, відображаємо їх список */}
-      {movies.length > 0 && (
-        <ul className={styles.movieList}>
-          {movies.map(({ id, title }) => (
-            <li key={id} className={styles.movieItem}>
-              {/* Лінк на сторінку з деталями фільму */}
-              <Link to={`/movies/${id}`} className={styles.movieLink}>{title}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {movies.length > 0 && <MovieList movies={movies} />} {/* Якщо є знайдені фільми, відображаємо їх за допомогою компонента MovieList. */}
     </div>
   );
 }
 
 export default MoviesPage;
-

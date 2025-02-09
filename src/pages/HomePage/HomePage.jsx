@@ -1,60 +1,41 @@
-import { useEffect, useState } from "react"; // Імпортуємо хуки для управління станом та ефектами
-import { fetchTrendingMovies } from "../../services/api"; // Імпортуємо функцію для отримання списку популярних фільмів
-import { Link } from "react-router-dom"; // Імпортуємо Link для навігації між сторінками
-import styles from "./HomePage.module.css"; // Імпортуємо модульні стилі
+import { useEffect, useState } from "react"; // Імпортуємо хук useEffect для виконання побічних ефектів та useState для управління станом компонентів.
+import { fetchTrendingMovies } from "../../services/api"; // Імпортуємо функцію fetchTrendingMovies, яка отримує список трендових фільмів з API.
+import MovieList from "../../components/MovieList/MovieList"; // Імпортуємо компонент MovieList для відображення списку фільмів.
+import styles from "./HomePage.module.css"; // Імпортуємо CSS-модулі для стилізації сторінки.
 
-function HomePage() {
-  // Стейт для збереження списку фільмів
-  const [movies, setMovies] = useState([]);
-  // Стейт для індикації завантаження
-  const [loading, setLoading] = useState(false);
-  // Стейт для збереження можливих помилок
-  const [error, setError] = useState(null);
+function HomePage() { // Функціональний компонент HomePage.
+  const [movies, setMovies] = useState([]); // Створюємо стан для зберігання фільмів.
+  const [loading, setLoading] = useState(false); // Створюємо стан для індикації процесу завантаження.
+  const [error, setError] = useState(null); // Створюємо стан для обробки помилок.
 
-  // Виконується один раз при завантаженні сторінки
-  useEffect(() => {
-    setLoading(true); // Починаємо завантаження
-    setError(null); // Скидаємо попередні помилки
+  useEffect(() => { // Використовуємо хук useEffect для того, щоб виконати функцію після рендеру компонента.
+    setLoading(true); // Починаємо завантаження (ставимо loading в true).
+    setError(null); // Скидаємо попередню помилку (якщо така була).
 
-    fetchTrendingMovies() // Викликаємо функцію для отримання даних
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setMovies(data); // Оновлюємо список фільмів, якщо дані у правильному форматі
+    fetchTrendingMovies() // Викликаємо функцію для отримання даних про трендові фільми.
+      .then((data) => { // Якщо API повертає дані:
+        if (Array.isArray(data)) { // Перевіряємо, чи дані є масивом.
+          setMovies(data); // Якщо так, оновлюємо стан movies.
         } else {
-          throw new Error("Unexpected API response format"); // Якщо формат некоректний, викликаємо помилку
+          throw new Error("Unexpected API response format"); // Якщо формат не відповідає очікуванням, генеруємо помилку.
         }
       })
-      .catch((error) => {
-        console.error("Error fetching movies:", error); // Логуємо помилку в консоль
-        setError("Failed to load movies. Please try again later."); // Встановлюємо повідомлення про помилку для відображення користувачеві
-      })
-      .finally(() => setLoading(false)); // Завершуємо завантаження
-  }, []);
+      .catch(() => setError("Failed to load movies. Please try again later.")) // Якщо сталася помилка при отриманні даних, встановлюємо повідомлення про помилку.
+      .finally(() => setLoading(false)); // Незалежно від результату, зупиняємо індикацію завантаження.
+  }, []); // Використовуємо порожній масив як залежність, щоб цей ефект виконувався лише один раз при першому рендері.
 
   return (
-    <div className={styles.container}> {/* Основний контейнер сторінки */}
-      <h1 className={styles.heading}>Trending Movies</h1> {/* Заголовок */}
+    <div className={styles.container}> {/* Основний контейнер для сторінки. */}
+      <h1 className={styles.heading}>Trending Movies</h1> {/* Заголовок сторінки, що відображає текст "Trending Movies". */}
 
-      {/* Відображення стану завантаження */}
-      {loading && <p className={styles.loading}>Loading...</p>}
+      {loading && <p className={styles.loading}>Loading...</p>} {/* Якщо триває завантаження, показуємо повідомлення "Loading..." */}
+      {error && <p className={styles.error}>{error}</p>} {/* Якщо сталася помилка, відображаємо повідомлення про помилку. */}
 
-      {/* Відображення повідомлення про помилку */}
-      {error && <p className={styles.error}>{error}</p>}
-
-      {/* Відображаємо список фільмів, якщо немає помилок і фільми є */}
-      {!loading && !error && (
-        movies.length > 0 ? (
-          <ul className={styles.list}> {/* Список фільмів */}
-            {movies.map((movie) => (
-              <li key={movie.id} className={styles.listItem}> {/* Окремий елемент списку */}
-                <Link to={`/movies/${movie.id}`} className={styles.link}> {/* Посилання на сторінку фільму */}
-                  {movie.title} {/* Назва фільму */}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      {!loading && !error && ( // Якщо немає помилки та завантаження завершено:
+        movies.length > 0 ? ( // Якщо є фільми:
+          <MovieList movies={movies} /> // Відображаємо список фільмів.
         ) : (
-          <p className={styles.noMovies}>No trending movies available.</p> // Повідомлення, якщо список порожній
+          <p className={styles.noMovies}>No trending movies available.</p> // Якщо немає фільмів, показуємо повідомлення "No trending movies available."
         )
       )}
     </div>

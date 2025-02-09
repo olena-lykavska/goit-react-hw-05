@@ -1,32 +1,20 @@
-import { Link, useLocation } from "react-router-dom"; // Імпортуємо Link для навігації та useLocation для збереження поточного місця розташування
-import styles from "./MovieList.module.css"; // Імпортуємо модульні стилі
+import { Link, useLocation } from "react-router-dom"; // Імпортуємо компоненти Link і хук useLocation з бібліотеки react-router-dom для маршрутизації та доступу до поточного шляху.
+import styles from "./MovieList.module.css"; // Імпортуємо CSS модулі для стилізації компонента.
 
-// Компонент MovieList отримує список фільмів як пропс
-const MovieList = ({ movies }) => {
-  const location = useLocation(); // Отримуємо поточне місцезнаходження сторінки для коректного повернення назад
-
-  // Перевіряємо, чи movies є масивом, інакше виводимо повідомлення про помилку
-  if (!Array.isArray(movies)) {
-    return <p className={styles.error}>No movies available</p>;
-  }
+function MovieList({ movies }) { // Функціональний компонент MovieList приймає список фільмів як пропс.
+  const location = useLocation(); // Використовуємо хук useLocation, щоб отримати поточне місцезнаходження (шлях) на сторінці. Це необхідно, щоб зберегти інформацію про поточну сторінку при переході на іншу.
 
   return (
-    <ul className={styles.list}>
-      {/* Проходимо по масиву фільмів і рендеримо кожен елемент */}
-      {movies.map(({ id, title }) => (
-        <li key={id} className={styles.item}>
-          {/* Створюємо посилання на сторінку конкретного фільму */}
-          <Link 
-            to={`/movies/${id}`} 
-            state={{ from: location }} // Зберігаємо місце, звідки прийшли, для коректного переходу назад
-            className={styles.link}
-          >
-            {title} {/* Виводимо назву фільму */}
+    <ul className={styles.list}> {/* Створюємо список фільмів і застосовуємо стилі з CSS-модуля для елемента списку. */}
+      {movies.map(({ id, title }) => ( // Перебираємо кожен фільм із масиву movies.
+        <li key={id} className={styles.listItem}> {/* Для кожного фільму створюємо елемент списку, використовуючи його id як унікальний ключ. */}
+          <Link to={`/movies/${id}`} state={{ from: location }} className={styles.link}> {/* Створюємо посилання на сторінку фільму, передаючи state з поточним місцезнаходженням. */}
+            {title} {/* Виводимо назву фільму в посиланні. */}
           </Link>
         </li>
       ))}
     </ul>
   );
-};
+}
 
 export default MovieList;
